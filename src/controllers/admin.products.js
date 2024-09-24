@@ -1,5 +1,4 @@
-const masterDb = require("../config/db.connect");
-const ProductObj = require("../services/index");
+const {ProductServices} = require("../services/index");
 const { createError } = require("../middleware/errorHandler.middleware");
 
 // Add Product
@@ -10,7 +9,7 @@ const createProduct = async (req, res, next) => {
     return next(createError("All field are mandatory", 400, "add controller"));
   }
   try {
-    const result = ProductObj.Product.addProduct(req.body);
+    const result =await ProductServices.Product.addProduct(req.body);
     return res.status(200).json({
       success: true,
       message: "product added successfully....",
@@ -28,10 +27,10 @@ const editproduct = async (req, res, next) => {
     return next(createError("All field are mandatory", 400, "add controller"));
   }
   try {
-    const result = ProductObj.Product.editProduct(req.body);
+    const result = await ProductServices.Product.editProduct(req.body);
     return res.status(200).json({
       success: true,
-      message: "product added successfully....",
+      message: "product updated successfully....",
       result: result,
     });
   } catch (error) {
@@ -42,18 +41,18 @@ const editproduct = async (req, res, next) => {
 // Delete Product
 
 const deleteProduct = async (req, res, next) => {
+  const {product_id}= req.params
   if (!product_id) {
     return next(createError("Please Provide Product Id", 400,));
   }
 try {
-  const result = ProductObj.Product.editProduct(req.body);
+  const result = ProductServices.Product.deleteproduct(product_id);
     return res.status(200).json({
       success: true,
-      message: "product added successfully....",
-      result: result,
+      message: "product Deleted successfully....",
     });
 } catch (error) {
-  
+  return next(createError(error.message, 500, "Delete product controller"));
 }
 };
 

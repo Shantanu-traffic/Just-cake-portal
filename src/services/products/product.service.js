@@ -1,15 +1,12 @@
 const masterDb = require("../../config/db.connect");
+const { createError } = require("../../middleware/errorHandler.middleware");
 
 class ProductService {
-  // product_details;
-  // constructor(product_details){
-  //     this.product_details = product_details
-  // }
-
   async addProduct(product_details) {
     const { title, description, image, price, created_by, stock, category } =
       product_details;
     try {
+      console.log("test data", product_details);
       const insertProduct = await masterDb.query(
         `
                          INSERT INTO products (title,description,image,price,created_by,stock,category)
@@ -20,12 +17,10 @@ class ProductService {
       );
 
       if (insertProduct.rows.length === 0) {
-        return next(
-          createError(
-            "Some thing Went Wrong to insert the data in db",
-            400,
-            "add product controller"
-          )
+        return createError(
+          "Some thing Went Wrong to insert the data in db",
+          400,
+          "add product controller"
         );
       }
 
@@ -70,23 +65,37 @@ class ProductService {
       );
 
       if (updateProduct.rows.length === 0) {
-        return next(
-          createError(
-            "Some thing Went Wrong to insert the data in db",
-            400,
-            "add product controller"
-          )
+        return createError(
+          "Some thing Went Wrong to insert the data in db",
+          400,
+          "add product controller"
         );
       }
 
-      return res.status(200).json({result: updateProduct.rows[0]});
+      return updateProduct.rows[0].id;
     } catch (error) {
       return error;
     }
   }
 
   async deleteproduct(product_id) {
-    await masterDb.query(`delete from products p where p.id = $1`,[product_id]).catch((err)=>{throw err})
+    try {
+      await masterDb
+        .query(`delete from products p where p.id = $1`, [product_id])
+        .catch((err) => {
+          throw err;
+        });
+      return {
+        success: true,
+        message: "product deleted successfully....",
+      };
+    } catch (error) {
+      return createError(
+        "Some thing Went Wrong to deletion the data in db",
+        400,
+        "delete product service"
+      );
+    }
   }
 }
 

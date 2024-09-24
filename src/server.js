@@ -18,17 +18,16 @@ app.use(cors())
 app.use(express.json());
 
 // routes
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "../src/public", "index.html"));
+});
 app.use('/api/v1/admin',adminRouter)
 
-app.use("*",(req,res,next)=>{
-  return next(createError(`${req.originalUrl} this url does not exist`,500,"global error"))
-})
+
 
 app.use(errorHandler)
 
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "Frontend", "index.html"));
-});
+
 // admin routes
 
 // Configure session middleware
@@ -98,7 +97,9 @@ async function connectToDb() {
     console.error("Error connecting to masterDb:", err);
   }
 }
-
+app.use("*",(req,res,next)=>{
+  return next(createError(`${req.originalUrl} this url does not exist`,500,"global error"))
+})
 server.on("error", (error) => {
   console.log("Error Found While Server Connect", error);
 });
