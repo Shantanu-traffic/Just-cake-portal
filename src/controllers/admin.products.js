@@ -22,7 +22,7 @@ const createProduct = async (req, res, next) => {
 
 // Edit Product
 const editproduct = async (req, res, next) => {
-  const {product_id,title,description,image,price,created_by,stock,category,} = req.body;
+  const {product_id,title,description,image,price,created_by} = req.body;
   if (!product_id ||  !title ||    !description ||    !image ||    !price ||  !created_by  ) {
     return next(createError("All field are mandatory", 400, "add controller"));
   }

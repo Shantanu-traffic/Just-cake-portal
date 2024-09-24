@@ -11,7 +11,7 @@ adminRouter.post('/add-product',createProduct)
 adminRouter.patch('/update-product',editproduct)
 
 // delete product by admin || DELETE
-adminRouter.delete('/delete-product',deleteProduct)
+adminRouter.delete('/delete-product/:product_id',deleteProduct)
 
 
 module.exports = adminRouter

@@ -8,7 +8,8 @@ const path = require("path");
 const adminRouter = require("./routes/admin.routes");
 const { createError, errorHandler } = require("./middleware/errorHandler.middleware");
 require("./auth/google.auth");
-const cors = require('cors')
+const cors = require('cors');
+const cartRouter = require("./routes/cart.routes");
 const PORT = process.env.PORT;
 
 
@@ -22,6 +23,7 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../src/public", "index.html"));
 });
 app.use('/api/v1/admin',adminRouter)
+app.use('/api/v1/cart',cartRouter)
 
 
 
