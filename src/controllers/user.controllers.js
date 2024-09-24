@@ -1,4 +1,4 @@
-const masterDb = require('../config/db');
+const masterDb = require('../config/db.connect');
 
 async function createUserIfNotExists(profile) {
     const { id, displayName } = profile;

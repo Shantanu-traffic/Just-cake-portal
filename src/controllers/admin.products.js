@@ -1,6 +1,6 @@
 // Add Product
 
-const masterDb = require("../config/db");
+const masterDb = require("../config/db.connect");
 const { createError } = require("../middleware/errorHandler.middleware");
 
 const addProductByAdmin = async (req, res, next) => {
