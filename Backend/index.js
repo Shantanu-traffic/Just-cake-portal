@@ -8,12 +8,15 @@ const path = require("path");
 require("./auth/google.auth");
 const PORT = process.env.PORT;
 
+
+
+// middleware 
 app.use(express.json());
-// app.use(express.static(path.join(__dirname,'Frontend')))
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "..", "Frontend", "index.html"));
 });
+// admin routes
 
 // Configure session middleware
 app.use(
