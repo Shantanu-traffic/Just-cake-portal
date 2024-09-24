@@ -1,9 +1,5 @@
 const masterDb = require("../../config/db.connect");
 class ProductService {
-  // product_details;
-  // constructor(product_details){
-  //     this.product_details = product_details
-  // }
 
   async addProduct(product_details) {
     const { title, description, image, price, created_by, stock, category } =
@@ -79,7 +75,7 @@ class ProductService {
         );
       }
 
-      return res.status(200).json({result: updateProduct.rows[0]});
+      return  updateProduct.rows[0].id
     } catch (error) {
       return error;
     }

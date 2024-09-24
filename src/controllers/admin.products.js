@@ -1,4 +1,4 @@
-const ProductObj = require("../services/index");
+const {ProductServices} = require("../services/index");
 const { createError } = require("../middleware/errorHandler.middleware");
 
 // Add Product
@@ -9,7 +9,7 @@ const createProduct = async (req, res, next) => {
     return next(createError("All field are mandatory", 400, "add controller"));
   }
   try {
-    const result =await ProductObj.Product.addProduct(req.body);
+    const result =await ProductServices.Product.addProduct(req.body);
     return res.status(200).json({
       success: true,
       message: "product added successfully....",
@@ -27,10 +27,10 @@ const editproduct = async (req, res, next) => {
     return next(createError("All field are mandatory", 400, "add controller"));
   }
   try {
-    const result = ProductObj.Product.editProduct(req.body);
+    const result = await ProductServices.Product.editProduct(req.body);
     return res.status(200).json({
       success: true,
-      message: "product added successfully....",
+      message: "product updated successfully....",
       result: result,
     });
   } catch (error) {
