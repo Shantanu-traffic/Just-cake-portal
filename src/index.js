@@ -5,13 +5,26 @@ const masterDb = require("./config/db");
 const session = require("express-session");
 const passport = require("passport");
 const path = require("path");
+const adminRouter = require("./routes/admin.routes");
+const { createError, errorHandler } = require("./middleware/errorHandler.middleware");
 require("./auth/google.auth");
+const cors = require('cors')
 const PORT = process.env.PORT;
 
 
 
 // middleware 
+app.use(cors())
 app.use(express.json());
+
+// routes
+app.use('/api/v1/admin',adminRouter)
+
+app.use("*",(req,res,next)=>{
+  return next(createError(`${req.originalUrl} this url does not exist`,500,"global error"))
+})
+
+app.use(errorHandler)
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "..", "Frontend", "index.html"));
