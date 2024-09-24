@@ -1,3 +1,4 @@
+const masterDb = require("../../config/db.connect");
 class ProductService {
   // product_details;
   // constructor(product_details){
@@ -8,6 +9,7 @@ class ProductService {
     const { title, description, image, price, created_by, stock, category } =
       product_details;
     try {
+      console.log("test data",product_details)
       const insertProduct = await masterDb.query(
         `
                          INSERT INTO products (title,description,image,price,created_by,stock,category)
