@@ -1,5 +1,5 @@
 const express = require('express')
-const { createProduct, editproduct, deleteProductByAdmin } = require('../controllers/admin.products')
+const { createProduct, editproduct, deleteProduct } = require('../controllers/admin.products')
 const passport = require('passport')
 const adminRouter = express.Router()
 
@@ -11,7 +11,7 @@ adminRouter.post('/add-product',createProduct)
 adminRouter.patch('/update-product',editproduct)
 
 // delete product by admin || DELETE
-adminRouter.delete('/delete-product',deleteProductByAdmin)
+adminRouter.delete('/delete-product',deleteProduct)
 
 
 module.exports = adminRouter

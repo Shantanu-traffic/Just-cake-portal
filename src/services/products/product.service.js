@@ -1,3 +1,5 @@
+const masterDb = require("../../config/db.connect");
+
 class ProductService {
   // product_details;
   // constructor(product_details){
@@ -81,6 +83,10 @@ class ProductService {
     } catch (error) {
       return error;
     }
+  }
+
+  async deleteproduct(product_id) {
+    await masterDb.query(`delete from products p where p.id = $1`,[product_id]).catch((err)=>{throw err})
   }
 }
 

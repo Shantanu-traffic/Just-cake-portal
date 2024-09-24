@@ -41,10 +41,24 @@ const editproduct = async (req, res, next) => {
 
 // Delete Product
 
-const deleteProductByAdmin = async (req, res, next) => {};
+const deleteProduct = async (req, res, next) => {
+  if (!product_id) {
+    return next(createError("Please Provide Product Id", 400,));
+  }
+try {
+  const result = ProductObj.Product.editProduct(req.body);
+    return res.status(200).json({
+      success: true,
+      message: "product added successfully....",
+      result: result,
+    });
+} catch (error) {
+  
+}
+};
 
 module.exports = {
   createProduct,
   editproduct,
-  deleteProductByAdmin,
+  deleteProduct,
 };
