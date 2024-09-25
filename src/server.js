@@ -10,6 +10,7 @@ const { createError, errorHandler } = require("./middleware/errorHandler.middlew
 require("./auth/google.auth");
 const cors = require('cors');
 const cartRouter = require("./routes/cart.routes");
+const orderRouter = require("./routes/order.routes");
 const PORT = process.env.PORT;
 
 
@@ -18,14 +19,14 @@ const PORT = process.env.PORT;
 app.use(cors())
 app.use(express.json());
 
+
 // routes
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../src/public", "index.html"));
 });
 app.use('/api/v1/admin',adminRouter)
 app.use('/api/v1/cart',cartRouter)
-
-
+app.use('/api/v2/order',orderRouter)
 
 app.use(errorHandler)
 
