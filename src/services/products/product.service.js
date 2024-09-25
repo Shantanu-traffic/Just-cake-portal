@@ -2,6 +2,40 @@ const masterDb = require("../../config/db.connect");
 const { createError } = require("../../middleware/errorHandler.middleware");
 
 class ProductService {
+  async getProducts(offSet) {
+    try {
+      const data = await masterDb
+        .query(
+          `SELECT * FROM products
+            LIMIT 10 OFFSET ($1 - 1) * 10;`,
+          [offSet]
+        )
+        .catch((err) => {
+          throw err;
+        });
+      return data;
+    } catch (error) {
+      return err;
+    }
+  }
+
+  async getSingleProduct(product_id) {
+    try {
+      const data = await masterDb
+        .query(
+          `SELECT * FROM products p
+            where p.id = $1`,
+          [product_id]
+        )
+        .catch((err) => {
+          throw err;
+        });
+      return data;
+    } catch (error) {
+      return err;
+    }
+  }
+
   async addProduct(product_details) {
     const { title, description, image, price, created_by, stock, category } =
       product_details;

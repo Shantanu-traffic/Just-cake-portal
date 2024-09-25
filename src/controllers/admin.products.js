@@ -1,8 +1,47 @@
 const {ProductServices} = require("../services/index");
 const { createError } = require("../middleware/errorHandler.middleware");
 
-// Add Product
+//Get  All Product
+const getAllProducts = async (req,res,next)=> {
+  try {
+    const offSet = req.offSet
+    if(!offSet){
+      throw new Error("offset Value is required")
+    }
+    else{
+      const result = ProductServices.Product.getProducts(offSet)
+      return res.status(200).json({
+        success: true,
+        message: "products fetched successfully....",
+        result: result,
+      });
+    }
+  } catch (error) {
+    return next(createError(error.message, 500, "add product controller"));
+  }
+}
 
+// Get Single Product
+const getProduct = async (req,res,next)=> {
+  try {
+    const product_id = req.product_id
+    if(!product_id){
+      throw new Error("product_id Value is required")
+    }
+    else{
+      const result = ProductServices.Product.getSingleProduct(product_id)
+      return res.status(200).json({
+        success: true,
+        message: "product fetched successfully....",
+        result: result,
+      });
+    }
+  } catch (error) {
+    return next(createError(error.message, 500, "add product controller"));
+  }
+}
+
+// Add Product
 const createProduct = async (req, res, next) => {
   const { title, description, image, price, created_by,stock,category } = req.body;
   if (!title || !description || !image || !price || !created_by) {
@@ -39,7 +78,6 @@ const editproduct = async (req, res, next) => {
 };
 
 // Delete Product
-
 const deleteProduct = async (req, res, next) => {
   const {product_id}= req.params
   if (!product_id) {
@@ -57,6 +95,8 @@ try {
 };
 
 module.exports = {
+  getAllProducts,
+  getProduct,
   createProduct,
   editproduct,
   deleteProduct,
