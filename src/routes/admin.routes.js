@@ -4,7 +4,7 @@ const passport = require('passport')
 const adminRouter = express.Router()
 
 // get All products || get
-adminRouter.get('/get-products',getAllProducts)
+adminRouter.post('/get-products',getAllProducts)
 
 // get All product || get
 adminRouter.get('/get-product',getProduct)
@@ -15,8 +15,8 @@ adminRouter.post('/add-product',createProduct)
 // edit product || PATCH
 adminRouter.patch('/update-product',editproduct)
 
-// delete product || DELETE
-adminRouter.delete('/delete-product',deleteProduct)
+// delete product by admin || DELETE
+adminRouter.delete('/delete-product/:product_id',deleteProduct)
 
 
 module.exports = adminRouter

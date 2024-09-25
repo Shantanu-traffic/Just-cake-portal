@@ -4,7 +4,7 @@ const { createError } = require("../middleware/errorHandler.middleware");
 //Get  All Product
 const getAllProducts = async (req,res,next)=> {
   try {
-    const offSet = req.offSet
+    const offSet = req.body.offSet
     if(!offSet){
       throw new Error("offset Value is required")
     }
@@ -24,7 +24,7 @@ const getAllProducts = async (req,res,next)=> {
 // Get Single Product
 const getProduct = async (req,res,next)=> {
   try {
-    const product_id = req.product_id
+    const product_id = req.query
     if(!product_id){
       throw new Error("product_id Value is required")
     }
@@ -61,7 +61,7 @@ const createProduct = async (req, res, next) => {
 
 // Edit Product
 const editproduct = async (req, res, next) => {
-  const {product_id,title,description,image,price,created_by,stock,category,} = req.body;
+  const {product_id,title,description,image,price,created_by} = req.body;
   if (!product_id ||  !title ||    !description ||    !image ||    !price ||  !created_by  ) {
     return next(createError("All field are mandatory", 400, "add controller"));
   }

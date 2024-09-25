@@ -58,11 +58,7 @@ class ProductService {
         );
       }
 
-      return {
-        success: true,
-        message: "product added successfully....",
-        result: insertProduct.rows[0],
-      };
+     return insertProduct.rows[0].id
     } catch (error) {
       return error;
     }
