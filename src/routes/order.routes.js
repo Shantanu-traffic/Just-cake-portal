@@ -1,5 +1,5 @@
 const express = require('express')
-const { delivery_address, orderProduct } = require('../controllers/orders.controllers')
+const { delivery_address, orderProduct, orderHistory } = require('../controllers/orders.controllers')
 const orderRouter = express.Router()
 
 
@@ -7,6 +7,9 @@ const orderRouter = express.Router()
 orderRouter.post('/address',delivery_address)
 
 // ORDER || POST
-orderRouter.post('/order',orderProduct)
+orderRouter.post('/placed-order',orderProduct)
+
+// ORDER HISTORY || GET
+orderRouter.get('/order-history/:user_id',orderHistory)
 
 module.exports = orderRouter

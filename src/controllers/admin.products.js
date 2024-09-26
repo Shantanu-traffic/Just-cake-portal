@@ -9,7 +9,7 @@ const getAllProducts = async (req,res,next)=> {
       throw new Error("offset Value is required")
     }
     else{
-      const result = ProductServices.Product.getProducts(offSet)
+      const result = await ProductServices.Product.getProducts(offSet)
       return res.status(200).json({
         success: true,
         message: "products fetched successfully....",
@@ -24,12 +24,13 @@ const getAllProducts = async (req,res,next)=> {
 // Get Single Product
 const getProduct = async (req,res,next)=> {
   try {
-    const product_id = req.query
+    const {product_id} = req.query
+
     if(!product_id){
       throw new Error("product_id Value is required")
     }
     else{
-      const result = ProductServices.Product.getSingleProduct(product_id)
+      const result =await ProductServices.Product.getSingleProduct(product_id)
       return res.status(200).json({
         success: true,
         message: "product fetched successfully....",

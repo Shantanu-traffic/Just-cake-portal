@@ -4,8 +4,8 @@ const Order = require("../services/orders/orders.services")
 
 // address
 const delivery_address = async (req,res,next)=>{
-    const {address,user_id,street,city,state,postal_code,country} = req.body
-    if(!address || !user_id || !street || !city || !state || !postal_code || !country){
+    const {user_id,street,city,state,postal_code,country} = req.body
+    if( !user_id || !street || !city || !state || !postal_code || !country){
         return next(createError("All field are mandatory",400,"delivery address controller"))
     }
 
@@ -22,7 +22,35 @@ const delivery_address = async (req,res,next)=>{
 }
 // order placed
 
-const orderProduct = async (req,res,next)=>{}
+const orderProduct = async (req,res,next)=>{
+    const { user_id} = req.body
+    if(!user_id){
+        return next(createError("user_id mandatory",400,"order proudct controller"))
+    }
+    try {
+        const result = await OrderServices.Order.orderProduct(req.body)
+        return res.status(200).json({
+            success:true,
+            message:"Item added for order",
+            order_id:result
+        })
+    } catch (error) {
+        return next(createError(error.message,500,"order product control"))
+    }
+}
 
-
-module.exports = {orderProduct,delivery_address}
+// order history
+const orderHistory = async (req,res,next)=>{
+    const { user_id } = req.params;
+    try {
+        const result = await OrderServices.Order.orderHistory(user_id)
+        return res.status(200).json({
+            success:true,
+            message:"all order history data fetched...",
+            result
+        })
+    } catch (error) {
+        return next(createError(error.message,500,"order history controller"))
+    }
+}
+module.exports = {orderProduct,delivery_address,orderHistory}
