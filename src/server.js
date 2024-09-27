@@ -27,13 +27,15 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use(express.json())
 app.use(
 	cors({
-		origin: "http://localhost:3000",
-		methods: "GET,POST,PUT,DELETE",
+		origin: "http://localhost:5002",
+		methods: "GET,POST,PUT,DELETE,PATCH",
 		credentials: true,
 	})
 );
+
 
 
 app.use("/auth", authRoute);
@@ -49,11 +51,7 @@ app.use('/api/v1/order',orderRouter)
 app.get("/login/success", (req, res) => {
   console.log("login success",req.user)
 if (req.user) {
-
-  // req.session.user = req.user;
-  
   res.cookie('user', JSON.stringify(req.user));
-  // res.send(req.user)
       res.redirect(process.env.CLIENT_URL)
 } else {
   res.status(403).json({ error: true, message: "Not Authorized" });
@@ -63,13 +61,22 @@ if (req.user) {
 app.get("/login/failed", (req, res) => {
   console.log("failed login",req.user)
 res.status(401).json({
-  error: true,
+  error: true,  
   message: "Log in failure",
 });
 });
 
-
-
+app.get("/logout", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.log(err);
+      res.status(500).json({ error: true, message: "Error logging out" });
+    } else {
+      res.clearCookie("user");
+      res.redirect(process.env.CLIENT_URL);
+    }
+  });
+});
 
 
 
@@ -90,6 +97,8 @@ async function connectToDb() {
   }
 }
 
+
+app.use(errorHandler)
 app.use("*",(req,res,next)=>{
   return next(createError(`${req.originalUrl} this url does not exist`,500,"global error"))
 })
