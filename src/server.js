@@ -67,14 +67,9 @@ res.status(401).json({
 });
 
 app.get("/logout", (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: true, message: "Error logging out" });
-    } else {
-      res.clearCookie("user");
-      res.redirect(process.env.CLIENT_URL);
-    }
+  app.get("/logout", (req, res) => {
+    res.clearCookie("user");
+    res.redirect(process.env.CLIENT_URL);
   });
 });
 
@@ -98,11 +93,11 @@ async function connectToDb() {
 }
 
 
-app.use(errorHandler)
+
 app.use("*",(req,res,next)=>{
   return next(createError(`${req.originalUrl} this url does not exist`,500,"global error"))
 })
-
+app.use(errorHandler)
 server.on("error", (error) => {
   console.log("Error Found While Server Connect", error);
 });
