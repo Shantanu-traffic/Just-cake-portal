@@ -15,7 +15,7 @@ adminRouter.post('/add-product',createProduct)
 // edit product || PATCH
 adminRouter.patch('/update-product',editproduct)
 
-// delete product by admin || DELETE
+// delete product || DELETE
 adminRouter.delete('/delete-product/:product_id',deleteProduct)
 
 
