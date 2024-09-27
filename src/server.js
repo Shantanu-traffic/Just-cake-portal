@@ -27,7 +27,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(express.json())
+
 app.use(
 	cors({
 		origin: "http://localhost:5002",
@@ -36,6 +36,7 @@ app.use(
 	})
 );
 
+app.use(express.json())
 
 
 app.use("/auth", authRoute);
