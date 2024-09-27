@@ -5,6 +5,8 @@ const createError = (errorMessage,statusCode,errorFound)=>{
 
 const errorHandler = async (error,req,res,next)=>{
    const {errorMessage,statusCode,errorFound} = error
+   console.log("err",error);
+   
    return res.status(statusCode || 500).json({
     success:false,
     message:errorMessage,

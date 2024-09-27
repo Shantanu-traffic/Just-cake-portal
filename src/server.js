@@ -1,91 +1,80 @@
 const express = require("express");
-const app = express();
 require("dotenv").config();
 const masterDb = require("./config/db.connect");
-const session = require("express-session");
+const cookieSession = require("cookie-session");
 const passport = require("passport");
-const path = require("path");
 const adminRouter = require("./routes/admin.routes");
 const { createError, errorHandler } = require("./middleware/errorHandler.middleware");
-require("./auth/google.auth");
+const passportStrategy = require("./auth/passport");
 const cors = require('cors');
+const authRoute = require("./routes/auth.routes");
 const cartRouter = require("./routes/cart.routes");
 const orderRouter = require("./routes/order.routes");
 const PORT = process.env.PORT;
 
 
-
-// middleware 
-app.use(cors())
-app.use(express.json());
+const app = express();
 
 
-// routes
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../src/public", "index.html"));
-});
-app.use('/api/v1/admin',adminRouter)
-app.use('/api/v1/cart',cartRouter)
-app.use('/api/v1/order',orderRouter)
-
-app.use(errorHandler)
-
-
-// admin routes
-
-// Configure session middleware
 app.use(
-  session({
-    secret: "fakljdfk",
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false },
-  })
+	cookieSession({
+		name: "session",
+		keys: ["Techverse"],
+		maxAge: 24 * 60 * 60 * 100,
+	})
 );
 
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get(
-  "/auth/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
+app.use(
+	cors({
+		origin: "http://localhost:3000",
+		methods: "GET,POST,PUT,DELETE",
+		credentials: true,
+	})
 );
 
-app.get(
-  "/auth/google/callback",
-  passport.authenticate("google", {
-    failureRedirect: "/auth/google/failure",
-  }),
-  (req, res) => {
-    res.redirect("/auth/protected"); // Redirect to a route that can display user info
-  }
-);
 
-//  failure
-app.get("/auth/google/failure", (req, res) => {
-  console.log("furkan....");
-  res.send("Some thing went Wrong...");
+app.use("/auth", authRoute);
+app.use('/api/v1/admin',adminRouter)
+app.use('/api/v1/cart',cartRouter)
+app.use('/api/v1/order',orderRouter)
+
+
+
+
+
+
+app.get("/login/success", (req, res) => {
+  console.log("login success",req.user)
+if (req.user) {
+
+  // req.session.user = req.user;
+  
+  res.cookie('user', JSON.stringify(req.user));
+  // res.send(req.user)
+      res.redirect(process.env.CLIENT_URL)
+} else {
+  res.status(403).json({ error: true, message: "Not Authorized" });
+}
+});
+
+app.get("/login/failed", (req, res) => {
+  console.log("failed login",req.user)
+res.status(401).json({
+  error: true,
+  message: "Log in failure",
+});
 });
 
 
-// success
-app.get("/auth/protected", (req, res) => {
-  if (!req.isAuthenticated()) {
-    return res.redirect("/auth/google");
-  }
-  return res.status(200).json({
-    success: true,
-    message: "user login successfull",
-    user: req.user,
-  });
-});
 
-// logout functionality
 
-app.use('/auth/logout',(req,res,next)=>{
-  req.session.destroy();
-  res.send('User Logout Successfully....')
-})
+
+
+
+
 
 const server = app.listen(PORT, () => {
   console.log(`SERVER RUN ON PORT ${PORT}`);
@@ -108,3 +97,4 @@ app.use("*",(req,res,next)=>{
 server.on("error", (error) => {
   console.log("Error Found While Server Connect", error);
 });
+
