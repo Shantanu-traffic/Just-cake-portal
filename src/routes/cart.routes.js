@@ -6,7 +6,7 @@ const cartRouter = express.Router()
 cartRouter.post('/add-to-cart',addToCart)
 
 // delete from cart || DELETE
-cartRouter.delete('/delete-cart-item/:product_id',deleteCartItem)
+cartRouter.delete('/delete-cart-item/:cart_id',deleteCartItem)
 
 
 // get all item from cart for specific user
