@@ -1,4 +1,5 @@
 const masterDb = require("../../config/db.connect");
+const uploadFileToFirebase = require("../../helper/fileupload.helper");
 const { createError } = require("../../middleware/errorHandler.middleware");
 
 class ProductService {
@@ -13,7 +14,7 @@ class ProductService {
         .catch((err) => {
           throw err;
         });
-        console.log("data found",data.rows)
+      console.log("data found", data.rows);
       return data.rows;
     } catch (error) {
       return err;
@@ -21,7 +22,7 @@ class ProductService {
   }
 
   async getSingleProduct(product_id) {
-    console.log("user",product_id)
+    console.log("user", product_id);
     try {
       const data = await masterDb
         .query(
@@ -32,37 +33,37 @@ class ProductService {
         .catch((err) => {
           throw err;
         });
-        console.log("datasss",data.rows)
+      console.log("datasss", data.rows);
       return data.rows;
     } catch (error) {
-      console.log("error",error)
+      console.log("error", error);
       return error;
     }
   }
 
-  async addProduct(product_details) {
-    const { title, description, image, price, created_by, stock, category } =
+  async addProduct(product_details, product_image) {
+    const { title, description, price, created_by, stock, category } =
       product_details;
     try {
-      console.log("test data", product_details);
+      const uploadedImage = await uploadFileToFirebase(product_image);
+      const imageUrl = uploadedImage.url;
       const insertProduct = await masterDb.query(
-        `
-                         INSERT INTO products (title,description,image,price,created_by,stock,category)
+        `                INSERT INTO products (title,description,image,price,created_by,stock,category)
                          VALUES ($1,$2,$3,$4,$5,$6,$7)
                          returning *
                       `,
-        [title, description, image, price, created_by, stock, category]
+        [title, description, imageUrl, price, created_by, stock, category]
       );
 
       if (insertProduct.rows.length === 0) {
         return createError(
           "Some thing Went Wrong to insert the data in db",
           400,
-          "add product controller"
+          "add product service"
         );
       }
 
-     return insertProduct.rows[0].id
+      return insertProduct.rows[0];
     } catch (error) {
       return error;
     }

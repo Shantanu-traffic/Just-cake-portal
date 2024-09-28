@@ -3,13 +3,13 @@ require("dotenv").config();
 const masterDb = require("./config/db.connect");
 const cookieSession = require("cookie-session");
 const passport = require("passport");
-const adminRouter = require("./routes/admin.routes");
 const { createError, errorHandler } = require("./middleware/errorHandler.middleware");
-const passportStrategy = require("./auth/passport");
 const cors = require('cors');
+const productRouter = require("./routes/product.routes");
 const authRoute = require("./routes/auth.routes");
 const cartRouter = require("./routes/cart.routes");
 const orderRouter = require("./routes/order.routes");
+var bodyParser = require('body-parser')// Set up multer for file uploads
 const PORT = process.env.PORT;
 
 
@@ -40,7 +40,7 @@ app.use(express.json())
 
 
 app.use("/auth", authRoute);
-app.use('/api/v1/admin',adminRouter)
+app.use('/api/v1/product',productRouter)
 app.use('/api/v1/cart',cartRouter)
 app.use('/api/v1/order',orderRouter)
 
