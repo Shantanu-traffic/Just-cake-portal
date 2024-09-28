@@ -1,15 +1,27 @@
 const { initializeApp } = require("firebase/app");
 const admin = require("firebase-admin");
-const serviceAccount = require("./config.json");
+const serviceAccount = {
+  type: process.env.type,
+  project_id: process.env.project_id,
+  private_key_id: process.env.private_key_id,
+  private_key: process.env.private_key.replace(/\\n/g, '\n'),
+  client_email: process.env.client_email,
+  client_id: process.env.client_id,
+  auth_uri: process.env.auth_uri,
+  token_uri: process.env.token_uri,
+  auth_provider_x509_cert_url: process.env.auth_provider_x509_cert_url,
+  client_x509_cert_url: process.env.client_x509_cert_url,
+  universe_domain: process.env.universe_domain
+};
 
 const firebaseConfig = {
-    apiKey: "AIzaSyC6jl-lYnpmp5CjQzG9_NyIRoCBxRlrwXM",
-    authDomain: "just-cake-8fae1.firebaseapp.com",
-    projectId: "just-cake-8fae1",
-    storageBucket: "just-cake-8fae1.appspot.com",
-    messagingSenderId: "190225303274",
-    appId: "1:190225303274:web:6441cfa0fdd466c5e7f993",
-    measurementId: "G-9XBHLQ1PPE"
+    apiKey: process.env.API_KEY,
+    authDomain: process.env.AUTH_DOMAIN,
+    projectId: process.env.PROJECT_ID,
+    storageBucket: process.env.STORAGE_BUCKET,
+    messagingSenderId: process.env.MESSAGING_SENDER_ID,
+    appId: process.env.APP_ID,
+    measurementId: process.env.MEASURMENT_ID
   };
 
 initializeApp(firebaseConfig);
