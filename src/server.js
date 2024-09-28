@@ -3,13 +3,13 @@ require("dotenv").config();
 const masterDb = require("./config/db.connect");
 const cookieSession = require("cookie-session");
 const passport = require("passport");
-const { createError, errorHandler } = require("./middleware/errorHandler.middleware");
-const cors = require('cors');
 const productRouter = require("./routes/product.routes");
+const { createError, errorHandler } = require("./middleware/errorHandler.middleware");
+const passportStrategy = require("./auth/passport");
+const cors = require('cors');
 const authRoute = require("./routes/auth.routes");
 const cartRouter = require("./routes/cart.routes");
 const orderRouter = require("./routes/order.routes");
-var bodyParser = require('body-parser')// Set up multer for file uploads
 const PORT = process.env.PORT;
 
 
@@ -17,11 +17,11 @@ const app = express();
 
 
 app.use(
-	cookieSession({
-		name: "session",
-		keys: ["Techverse"],
-		maxAge: 24 * 60 * 60 * 100,
-	})
+  cookieSession({
+    name: "session",
+    keys: ["Techverse"],
+    maxAge: 24 * 60 * 60 * 100,
+  })
 );
 
 app.use(passport.initialize());
@@ -29,11 +29,11 @@ app.use(passport.session());
 
 
 app.use(
-	cors({
-		origin: "http://localhost:5002",
-		methods: "GET,POST,PUT,DELETE,PATCH",
-		credentials: true,
-	})
+  cors({
+    origin: "http://localhost:5002",
+    methods: "GET,POST,PUT,DELETE,PATCH",
+    credentials: true,
+  })
 );
 
 app.use(express.json())
@@ -102,4 +102,3 @@ app.use(errorHandler)
 server.on("error", (error) => {
   console.log("Error Found While Server Connect", error);
 });
-
