@@ -19,12 +19,12 @@ class CartService {
   }
 
   // cart item submit
-  async deleteCartItem(product_id){
+  async deleteCartItem(cart_id){
     try {
-      console.log("product id",product_id)
+      console.log("cart id",cart_id)
       const itemDeleted = await masterDb.query(`
             DELETE FROM carts WHERE id = $1
-        `,[product_id])
+        `,[cart_id])
         return itemDeleted.rowCount
     } catch (error) {
       return error

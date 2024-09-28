@@ -25,14 +25,14 @@ const addToCart = async (req, res, next) => {
 // delete
 
 const deleteCartItem = async (req, res, next) => {
-  const { product_id } = req.params;
+  const { cart_id } = req.params;
   if (!product_id) {
     return next(
       createError("Provide product id", 500, "delete cart item controller")
     );
   }
   try {
-    const result = await CartServices.Cart.deleteCartItem(product_id);
+    const result = await CartServices.Cart.deleteCartItem(cart_id);
     return res.status(200).json({
       success: true,
       message: "Item deleted successfully",
