@@ -4,8 +4,8 @@ const Order = require("../services/orders/orders.services")
 
 // address
 const delivery_address = async (req,res,next)=>{
-    const {user_id,street,city,state,postal_code,country} = req.body
-    if( !user_id || !street || !city || !state || !postal_code || !country){
+    const {user_id,street,city,state,postal_code,country,phone} = req.body
+    if( !user_id || !street || !city || !state || !postal_code || !country || !phone){
         return next(createError("All field are mandatory",400,"delivery address controller"))
     }
 

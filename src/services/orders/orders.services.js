@@ -2,14 +2,14 @@ const masterDb = require("../../config/db.connect");
 
 class OrderService {
   async deliveryAddress(req) {
-    const { user_id, street, city, state, postal_code, country } = req;
+    const { user_id, street, city, state, postal_code, country,phone } = req;
     try {
       const result = await masterDb.query(
         `
-                    INSERT INTO addresses (user_id,street,city,state,postal_code,country)
-                    VALUES ($1,$2,$3,$4,$5,$6) returning address_id
+                    INSERT INTO addresses (user_id,street,city,state,postal_code,country,phone)
+                    VALUES ($1,$2,$3,$4,$5,$6,$7) returning address_id
                 `,
-        [user_id, street, city, state, postal_code, country]
+        [user_id, street, city, state, postal_code, country,phone]
       );
       return result.rows[0].address_id;
     } catch (error) {
