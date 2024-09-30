@@ -4,14 +4,14 @@ const {createUserIfNotExists} = require("../controllers/user.controllers")
 passport.use(
 	new GoogleStrategy(
 		{
-			clientID: process.env.CLIENT_ID,
-			clientSecret: process.env.CLIENT_SECRET,
+			clientID: process.env.GOOGLE_CLIENT_ID,
+			clientSecret: process.env.GOOGLE_CLIENT_SECRET,
 			callbackURL: "/auth/google/callback",
 			scope: ["profile", "email"],
 		},
 		async function (accessToken, refreshToken, profile, callback) {
 			const user = await createUserIfNotExists(profile);
-				console.log("user data",user)
+				
 				return callback(null, user); // Pass the user object to the next middleware
 		}
 	)

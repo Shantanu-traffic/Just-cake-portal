@@ -50,7 +50,7 @@ app.use('/api/v1/order',orderRouter)
 
 
 app.get("/login/success", (req, res) => {
-  console.log("login success",req.user)
+  
 if (req.user) {
   res.cookie('user', JSON.stringify(req.user));
       res.redirect(process.env.CLIENT_URL)
@@ -60,22 +60,12 @@ if (req.user) {
 });
 
 app.get("/login/failed", (req, res) => {
-  console.log("failed login",req.user)
+  
 res.status(401).json({
   error: true,  
   message: "Log in failure",
 });
 });
-
-app.get("/logout", (req, res) => {
-  app.get("/logout", (req, res) => {
-    res.clearCookie("user");
-    res.redirect(process.env.CLIENT_URL);
-  });
-});
-
-
-
 
 
 

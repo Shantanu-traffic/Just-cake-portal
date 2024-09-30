@@ -26,7 +26,7 @@ const addToCart = async (req, res, next) => {
 
 const deleteCartItem = async (req, res, next) => {
   const { cart_id } = req.params;
-  console.log("cart id",cart_id)
+  
   if (!cart_id) {
     return next(
       createError("Provide cart id", 500, "delete cart item controller")
@@ -48,7 +48,7 @@ const deleteCartItem = async (req, res, next) => {
 
 const getAllCartItemForUser = async (req, res, next) => {
   const { user_id } = req.query;
-  console.log("user_id", user_id);
+  
   if (!user_id) {
     return next(
       createError("Provide user id ", 400, "get all cart item controller")

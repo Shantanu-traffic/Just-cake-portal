@@ -21,7 +21,6 @@ class CartService {
   // cart item submit
   async deleteCartItem(cart_id) {
     try {
-      console.log("cart id", cart_id);
       const itemDeleted = await masterDb.query(
         `
             DELETE FROM carts WHERE id = $1
@@ -36,7 +35,6 @@ class CartService {
 
   // get all cart item for specific user
   async getAllCartItemForUser(user_id) {
-    console.log("userid ", user_id);
     try {
       const result = await masterDb.query(
         `

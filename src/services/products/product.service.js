@@ -14,7 +14,6 @@ class ProductService {
         .catch((err) => {
           throw err;
         });
-      console.log("data found", data.rows);
       return data.rows;
     } catch (error) {
       return err;
@@ -22,7 +21,6 @@ class ProductService {
   }
 
   async getSingleProduct(product_id) {
-    console.log("user", product_id);
     try {
       const data = await masterDb
         .query(
@@ -33,10 +31,9 @@ class ProductService {
         .catch((err) => {
           throw err;
         });
-      console.log("datasss", data.rows);
+
       return data.rows;
     } catch (error) {
-      console.log("error", error);
       return error;
     }
   }
