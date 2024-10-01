@@ -1,5 +1,6 @@
 const express = require('express')
 const { addToCart, deleteCartItem, getAllCartItemForUser, proudctQty } = require('../controllers/cart.controllers')
+const { contactUs } = require('../controllers/contactus.controller')
 const cartRouter = express.Router()
 
 // add to cart  || POST
@@ -14,4 +15,6 @@ cartRouter.get('/all-cart-item',getAllCartItemForUser)
 
 // increase qty
 cartRouter.patch('/qty',proudctQty)
+
+cartRouter.post('/send-mail',contactUs)
 module.exports = cartRouter

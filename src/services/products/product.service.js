@@ -16,7 +16,8 @@ class ProductService {
         });
       return data.rows;
     } catch (error) {
-      return err;
+      console.log("error found",error)
+      return error;
     }
   }
 
