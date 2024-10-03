@@ -19,8 +19,7 @@ const payment = async (req,res,next)=>{
         return res.status(200).json({
             success:true,
             message:"Payment done successfully",
-            result:result,
-            mailResponse:mailResponse
+            result:{...result,...mailResponse},
         })
     } catch (error) {
         return next(createError(error.message,500,"error in payment controller"))
