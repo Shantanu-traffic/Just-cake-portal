@@ -118,9 +118,9 @@ class ProductService {
     try {
       await masterDb
         .query(
-          `UPDATE products p
-            SET p.is_removed=true
-            WHERE p.id= $1;`,
+          `UPDATE products
+            SET is_removed=true
+            WHERE id= $1;`,
           [product_id]
         )
         .catch((err) => {
