@@ -72,41 +72,44 @@ class OrderService {
   async orderHistory(user_id) {
     try {
       const orders = await masterDb.query(
-        `SELECT 
-                  o.order_id, 
-                  o.total_amount, 
-                  o.order_date, 
-                  o.order_status, 
-                  p2.payment_mode, 
-                  p2.payment_receipt_attachement,
-                  ARRAY_AGG(
-                      json_build_object(
-                          'product_id', opm.product_id,
-                          'title', p.title,
-                          'description', p.description, 
-                          'image', p.image, 
-                          'quantity', opm.quantity, 
-                          'price', opm.price,
-                          'note', c.note
-                      )
-                  ) AS products
-              FROM 
-                  orders o
-              JOIN 
-                  order_products_mapping opm ON o.order_id = opm.order_id
-              JOIN 
-                  products p ON p.id = opm.product_id
-              JOIN 
-                  payments p2 ON p2.order_id = o.order_id
-
-                   join 
-               carts c on c.user_id = p2.user_id 
-              WHERE 
-                  o.user_id = $1
-              GROUP BY 
-                  o.order_id, p2.payment_mode, p2.payment_receipt_attachement
-              ORDER BY 
-                  o.order_date DESC;`,
+        `                
+                 
+SELECT 
+    o.order_id, 
+    o.total_amount, 
+    o.order_date, 
+    o.order_status, 
+    p2.payment_mode, 
+    p2.payment_receipt_attachement,
+    ARRAY_AGG(
+        DISTINCT jsonb_build_object(
+            'product_id', opm.product_id,
+            'title', p.title,
+            'description', p.description, 
+            'image', p.image, 
+            'quantity', opm.quantity, 
+            'price', opm.price,
+            'note', c.note
+        )
+    ) AS products
+FROM 
+    orders o
+JOIN 
+    order_products_mapping opm ON o.order_id = opm.order_id
+JOIN 
+    products p ON p.id = opm.product_id
+JOIN 
+    payments p2 ON p2.order_id = o.order_id
+LEFT JOIN 
+    carts c ON c.user_id = p2.user_id 
+            AND c.product_id = opm.product_id -- Ensure only matching product note
+WHERE 
+    o.user_id = $1
+GROUP BY 
+    o.order_id, p2.payment_mode, p2.payment_receipt_attachement
+ORDER BY 
+    o.order_date DESC;
+`,
         [user_id]
       );
       return orders.rows;
@@ -118,38 +121,42 @@ class OrderService {
   async adminOrderHistory() {
     try {
       const orders = await masterDb.query(
-        `SELECT 
-                  o.order_id, 
-                  o.total_amount, 
-                  o.order_date, 
-                  o.order_status, 
-                  p2.payment_mode, 
-                  p2.payment_receipt_attachement,
-                  ARRAY_AGG(
-                      json_build_object(
-                          'product_id', opm.product_id,
-                          'title', p.title,
-                          'description', p.description, 
-                          'image', p.image, 
-                          'quantity', opm.quantity, 
-                          'price', opm.price,
-                           'note', c.note
-                      )
-                  ) AS products
-              FROM 
-                  orders o
-              JOIN 
-                  order_products_mapping opm ON o.order_id = opm.order_id
-              JOIN 
-                  products p ON p.id = opm.product_id
-              JOIN 
-                  payments p2 ON p2.order_id = o.order_id
-                   join 
-               carts c on c.user_id = p2.user_id 
-              GROUP BY 
-                  o.order_id, p2.payment_mode, p2.payment_receipt_attachement
-              ORDER BY 
-                  o.order_date DESC;`
+        `                
+                 
+SELECT 
+    o.order_id, 
+    o.total_amount, 
+    o.order_date, 
+    o.order_status, 
+    p2.payment_mode, 
+    p2.payment_receipt_attachement,
+    ARRAY_AGG(
+        DISTINCT jsonb_build_object(
+            'product_id', opm.product_id,
+            'title', p.title,
+            'description', p.description, 
+            'image', p.image, 
+            'quantity', opm.quantity, 
+            'price', opm.price,
+            'note', c.note
+        )
+    ) AS products
+FROM 
+    orders o
+JOIN 
+    order_products_mapping opm ON o.order_id = opm.order_id
+JOIN 
+    products p ON p.id = opm.product_id
+JOIN 
+    payments p2 ON p2.order_id = o.order_id
+LEFT JOIN 
+    carts c ON c.user_id = p2.user_id 
+            AND c.product_id = opm.product_id -- Ensure only matching product note
+GROUP BY 
+    o.order_id, p2.payment_mode, p2.payment_receipt_attachement
+ORDER BY 
+    o.order_date DESC;`
+
       );
       return orders.rows;
     } catch (error) {
