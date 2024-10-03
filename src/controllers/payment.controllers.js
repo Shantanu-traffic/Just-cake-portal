@@ -9,10 +9,12 @@ const payment = async (req,res,next)=>{
     }
     try {
         const result = await PaymentService.Payment.payment(req.body)
+        const mailResponse = await PaymentService.Payment.paymentMail(result.payment_id)
+        
         return res.status(200).json({
             success:true,
             message:"Payment done successfully",
-            result:result
+            result:mailResponse
         })
     } catch (error) {
         return next(createError(error.message,500,"error in payment controller"))
