@@ -85,10 +85,11 @@ const deleteProduct = async (req, res, next) => {
     return next(createError("Please Provide Product Id", 400,));
   }
 try {
-  const result = ProductServices.Product.deleteproduct(product_id);
+  const result = await ProductServices.Product.deleteproduct(product_id);
     return res.status(200).json({
       success: true,
       message: "product Deleted successfully....",
+      data: result
     });
 } catch (error) {
   return next(createError(error.message, 500, "Delete product controller"));

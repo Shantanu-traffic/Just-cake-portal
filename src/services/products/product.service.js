@@ -1,6 +1,7 @@
 const masterDb = require("../../config/db.connect");
 const uploadFileToFirebase = require("../../helper/fileupload.helper");
 const { createError } = require("../../middleware/errorHandler.middleware");
+const { getStorage, ref, deleteObject } = require("firebase/storage");
 
 class ProductService {
   async getProducts(offSet) {
@@ -8,7 +9,7 @@ class ProductService {
       const data = await masterDb
         .query(
           `SELECT * FROM products
-            LIMIT 10 OFFSET ($1 - 1) * 10;`,
+            LIMIT 10 OFFSET ($1 - 1) * 10 where is_removed = false;`,
           [offSet]
         )
         .catch((err) => {
@@ -16,7 +17,7 @@ class ProductService {
         });
       return data.rows;
     } catch (error) {
-      console.log("error found",error)
+      console.log("error found", error);
       return error;
     }
   }
@@ -115,15 +116,23 @@ class ProductService {
   async deleteproduct(product_id) {
     try {
       await masterDb
-        .query(`delete from products p where p.id = $1`, [product_id])
+        .query(
+          `UPDATE products p
+            SET p.is_removed=true
+            WHERE p.id= $1;`,
+          [product_id]
+        )
         .catch((err) => {
           throw err;
         });
+
       return {
         success: true,
-        message: "product deleted successfully....",
+        message: "product deleted successfully from DB",
       };
     } catch (error) {
+      console.log(error);
+
       return createError(
         "Some thing Went Wrong to deletion the data in db",
         400,
