@@ -33,7 +33,9 @@ class PaymentService {
 
       const deleteData = await masterDb.query(`
               DELETE FROM carts WHERE user_id = $1
-        `,[result.user_id])
+        `,[result.rows[0].user_id])
+        console.log("item deleted",deleteData)
+        console.log("user id found",result.rows[0].user_id)
         await masterDb.query("COMMIT");
       return result.rows[0];
     } catch (error) {
