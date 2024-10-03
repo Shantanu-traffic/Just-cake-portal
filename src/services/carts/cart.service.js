@@ -42,7 +42,7 @@ class CartService {
     p.id as product_id, 
     * FROM carts c
           INNER JOIN products p on p.id = c.product_id
-          WHERE user_id = $1
+          WHERE user_id = $1 and invisible = false
         `,
         [user_id]
       );
