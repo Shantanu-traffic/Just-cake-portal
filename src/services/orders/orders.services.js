@@ -73,9 +73,11 @@ class OrderService {
     try {
       const orders = await masterDb.query(
         `SELECT o.order_id, o.total_amount, o.order_date, o.order_status, 
-                    ARRAY_AGG(json_build_object('product_id', opm.product_id, 'quantity', opm.quantity, 'price', opm.price)) AS products
+                    ARRAY_AGG(json_build_object('product_id', opm.product_id,'title',p.title,
+                    'description',p.description, 'image',p.image, 'quantity', opm.quantity, 'price', opm.price)) AS products
              FROM orders o
              JOIN order_products_mapping opm  ON o.order_id = opm.order_id
+             JOIN products p on p.id = opm.product_id
              WHERE o.user_id = $1
              GROUP BY o.order_id
              ORDER BY o.order_date DESC`,
