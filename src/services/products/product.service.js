@@ -67,18 +67,19 @@ class ProductService {
     }
   }
 
-  async editProduct(product_details) {
+  async editProduct(product_details, product_image) {
     const {
       product_id,
       title,
       description,
-      image,
       price,
       created_by,
       stock,
       category,
     } = product_details;
     try {
+      const uploadedImage = await uploadFileToFirebase(product_image);
+      const imageUrl = uploadedImage.url;
       const updateProduct = await masterDb.query(
         `
                     UPDATE products
@@ -88,7 +89,7 @@ class ProductService {
         [
           title,
           description,
-          image,
+          imageUrl,
           price,
           created_by,
           stock,

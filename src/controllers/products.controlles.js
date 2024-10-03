@@ -62,12 +62,12 @@ const createProduct = async (req, res, next) => {
 
 // Edit Product
 const editproduct = async (req, res, next) => {
-  const {product_id,title,description,image,price,created_by} = req.body;
-  if (!product_id ||  !title ||    !description ||    !image ||    !price ||  !created_by  ) {
+  const {product_id,title,description,price,created_by,stock, category} = req.body;
+  if (!product_id ||  !title ||    !description ||    !price ||  !created_by || !stock || !category ) {
     return next(createError("All field are mandatory", 400, "add controller"));
   }
   try {
-    const result = await ProductServices.Product.editProduct(req.body);
+    const result = await ProductServices.Product.editProduct(req.body, req.file);
     return res.status(200).json({
       success: true,
       message: "product updated successfully....",

@@ -13,7 +13,7 @@ productRouter.get('/get-product',getProduct)
 productRouter.post('/add-product',upload.single('image'),createProduct)
 
 // edit product || PATCH
-productRouter.patch('/update-product',editproduct)
+productRouter.patch('/update-product',upload.single('image'),editproduct)
 
 // delete product || DELETE
 productRouter.delete('/delete-product/:product_id',deleteProduct)
