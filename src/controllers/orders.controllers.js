@@ -72,7 +72,7 @@ const adminOrderHistory = async (req,res,next)=>{
 
 const cancelOrder = async (req,res,next)=>{
     try {
-        const {order_id} =req.params
+        const {order_id} =req.body
         const result = await OrderServices.Order.cancelOrder(order_id)
         return res.status(200).json({
             success:true,
