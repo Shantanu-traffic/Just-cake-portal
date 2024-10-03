@@ -9,7 +9,8 @@ class ProductService {
       const data = await masterDb
         .query(
           `SELECT * FROM products
-            LIMIT 10 OFFSET ($1 - 1) * 10 where is_removed = false;`,
+          where is_removed = false
+            LIMIT 10 OFFSET ($1 - 1) * 10 `,
           [offSet]
         )
         .catch((err) => {
