@@ -87,7 +87,7 @@ class OrderService {
                           'image', p.image, 
                           'quantity', opm.quantity, 
                           'price', opm.price,
-                          'note', opm.note
+                          'note', c.note
                       )
                   ) AS products
               FROM 
@@ -98,6 +98,9 @@ class OrderService {
                   products p ON p.id = opm.product_id
               JOIN 
                   payments p2 ON p2.order_id = o.order_id
+
+                   join 
+               carts c on c.user_id = p2.user_id 
               WHERE 
                   o.user_id = $1
               GROUP BY 
@@ -130,7 +133,7 @@ class OrderService {
                           'image', p.image, 
                           'quantity', opm.quantity, 
                           'price', opm.price,
-                           'note', opm.note
+                           'note', c.note
                       )
                   ) AS products
               FROM 
@@ -141,6 +144,8 @@ class OrderService {
                   products p ON p.id = opm.product_id
               JOIN 
                   payments p2 ON p2.order_id = o.order_id
+                   join 
+               carts c on c.user_id = p2.user_id 
               GROUP BY 
                   o.order_id, p2.payment_mode, p2.payment_receipt_attachement
               ORDER BY 

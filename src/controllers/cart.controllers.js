@@ -26,7 +26,7 @@ const addToCart = async (req, res, next) => {
 
 const deleteCartItem = async (req, res, next) => {
   const { cart_id } = req.params;
-  
+
   if (!cart_id) {
     return next(
       createError("Provide cart id", 500, "delete cart item controller")
@@ -48,7 +48,7 @@ const deleteCartItem = async (req, res, next) => {
 
 const getAllCartItemForUser = async (req, res, next) => {
   const { user_id } = req.query;
-  
+
   if (!user_id) {
     return next(
       createError("Provide user id ", 400, "get all cart item controller")
@@ -97,9 +97,31 @@ const proudctQty = async (req, res, next) => {
   }
 };
 
+const editCartItem = async (req, res, next) => {
+  console.log("req.boyd",req.body)
+  const { note, cart_id } = req.body;
+  if (!note || !cart_id) {
+    return next(
+      createError("Provide all details", 400, "edit cart item controller")
+    );
+  }
+  try {
+    const result = await CartServices.Cart.cartAddNotes(req.body);
+
+    return res.status(200).json({
+      success: true,
+      message: "Notes added succesffully",
+      cart_id:result
+    });
+
+  } catch (error) {
+    return next(createError(error.message, 500, "edit cart controller"));
+  }
+};
 module.exports = {
   addToCart,
   deleteCartItem,
   getAllCartItemForUser,
   proudctQty,
+  editCartItem,
 };

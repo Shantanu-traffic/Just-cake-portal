@@ -79,6 +79,22 @@ class CartService {
       return error;
     }
   }
+
+  // update cart item
+  async cartAddNotes(req){
+    const {note,cart_id} = req
+    try {
+      const result = await masterDb.query(`
+                UPDATE carts
+                SET note = $1
+                WHERE id = $2 returning id;
+        `,[note,cart_id])
+        
+        return result.rows[0].id;
+    } catch (error) {
+      return error
+    }
+  }
 }
 
 const Cart = new CartService();
