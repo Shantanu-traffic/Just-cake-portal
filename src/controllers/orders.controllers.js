@@ -53,4 +53,35 @@ const orderHistory = async (req,res,next)=>{
         return next(createError(error.message,500,"order history controller"))
     }
 }
-module.exports = {orderProduct,delivery_address,orderHistory}
+
+
+// order history for admin
+const adminOrderHistory = async (req,res,next)=>{
+    try {
+        const result = await OrderServices.Order.adminOrderHistory()
+        return res.status(200).json({
+            success:true,
+            message:"all order history data fetched...",
+            result
+        })
+    } catch (error) {
+        return next(createError(error.message,500,"order history controller"))
+    }
+}
+
+
+const cancelOrder = async (req,res,next)=>{
+    try {
+        const {order_id} =req.params
+        const result = await OrderServices.Order.cancelOrder(order_id)
+        return res.status(200).json({
+            success:true,
+            message:" Order cancelled",
+            result
+        })
+    } catch (error) {
+        return next(createError(error.message,500,"order cancel controller"))
+    }
+}
+
+module.exports = {orderProduct,delivery_address,orderHistory,adminOrderHistory,cancelOrder}
