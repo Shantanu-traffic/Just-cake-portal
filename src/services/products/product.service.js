@@ -80,8 +80,19 @@ class ProductService {
       category,
     } = product_details;
     try {
-      const uploadedImage = await uploadFileToFirebase(product_image);
-      const imageUrl = uploadedImage.url;
+      let imageUrl;
+     
+      if(product_image.file){
+        const uploadedImage = await uploadFileToFirebase(product_image.file);
+   
+   
+        imageUrl = uploadedImage.url;
+      }else{
+        imageUrl = product_image.body.image
+       
+      }
+    
+
       const updateProduct = await masterDb.query(
         `
                     UPDATE products
@@ -99,17 +110,12 @@ class ProductService {
           product_id,
         ]
       );
-
-      if (updateProduct.rows.length === 0) {
-        return createError(
-          "Some thing Went Wrong to insert the data in db",
-          400,
-          "add product controller"
-        );
-      }
+     
+     
 
       return updateProduct.rows[0].id;
     } catch (error) {
+      console.log("error found....",error)
       return error;
     }
   }

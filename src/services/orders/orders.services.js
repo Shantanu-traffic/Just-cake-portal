@@ -157,7 +157,7 @@ class OrderService {
       const result = await masterDb.query(
         ` UPDATE orders 
       SET is_cancelled = true 
-      WHERE order_id =$1;
+      WHERE order_id =$1 return id;
                 `,
         [order_id]
       );

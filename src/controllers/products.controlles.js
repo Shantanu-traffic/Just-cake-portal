@@ -67,7 +67,7 @@ const editproduct = async (req, res, next) => {
     return next(createError("All field are mandatory", 400, "add controller"));
   }
   try {
-    const result = await ProductServices.Product.editProduct(req.body, req.file);
+    const result = await ProductServices.Product.editProduct(req.body, req);
     return res.status(200).json({
       success: true,
       message: "product updated successfully....",
