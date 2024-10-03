@@ -16,6 +16,7 @@ class PaymentService {
       total_amount,
     } = payment_details;
     try {
+      await masterDb.query("BEGIN");
       const result = await masterDb.query(
         `
                     INSERT INTO payments (order_id,user_id,payment_mode,payment_receipt_attachement,total_amount)
@@ -33,9 +34,10 @@ class PaymentService {
       const deleteData = await masterDb.query(`
               DELETE FROM carts WHERE user_id = $1
         `,[result.user_id])
-
+        await masterDb.query("COMMIT");
       return result.rows[0];
     } catch (error) {
+      await masterDb.query("ROLLBACK");
       return error;
     }
   }

@@ -1,3 +1,4 @@
+const masterDb = require("../config/db.connect")
 const { createError } = require("../middleware/errorHandler.middleware")
 const { PaymentService } = require("../services")
 
@@ -12,16 +13,17 @@ const payment = async (req,res,next)=>{
     }
     try {
         console.log(req.body,req.file);
-        
+        await masterDb.query("BEGIN");
         const result = await PaymentService.Payment.payment(req.body,req.file)
         const mailResponse = await PaymentService.Payment.paymentMail(result.user_id,result.order_id,result.total_amount)
-        
+        await masterDb.query("COMMIT");
         return res.status(200).json({
             success:true,
             message:"Payment done successfully",
             result:{...result,...mailResponse},
         })
     } catch (error) {
+        await masterDb.query("ROLLBACK");
         return next(createError(error.message,500,"error in payment controller"))
     }
 }
