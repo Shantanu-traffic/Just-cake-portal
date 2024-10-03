@@ -49,13 +49,13 @@ class OrderService {
       const order_id = orderResult.rows[0].order_id;
 
       for (const item of products) {
-        const { product_id, quantity, price } = item;
+        const { product_id, quantity, price, note } = item;
         const itemQuery = await masterDb.query(
           `
-                    INSERT INTO order_products_mapping (order_id, product_id, quantity, price)
-                    VALUES ($1, $2, $3, $4);
+                    INSERT INTO order_products_mapping (order_id, product_id, quantity, price, note)
+                    VALUES ($1, $2, $3, $4, $5);
                 `,
-          [order_id, product_id, quantity, price]
+          [order_id, product_id, quantity, price, note]
         );
       }
 
@@ -86,7 +86,8 @@ class OrderService {
                           'description', p.description, 
                           'image', p.image, 
                           'quantity', opm.quantity, 
-                          'price', opm.price
+                          'price', opm.price,
+                          'note', opm.note
                       )
                   ) AS products
               FROM 
@@ -128,7 +129,8 @@ class OrderService {
                           'description', p.description, 
                           'image', p.image, 
                           'quantity', opm.quantity, 
-                          'price', opm.price
+                          'price', opm.price,
+                           'note', opm.note
                       )
                   ) AS products
               FROM 
