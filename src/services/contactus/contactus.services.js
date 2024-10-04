@@ -1,5 +1,6 @@
 const { sendEmailCustomerAdmin } = require("../../helper/email.helper");
 const masterDb = require("../../config/db.connect");
+require('dotenv').config()
 class ContactServices {
   async contactUsByCustomer(req) {
     try {
@@ -12,6 +13,7 @@ class ContactServices {
       const emailData = {
         name: name,
         message: message,
+        webiste_link:'www.justcakes.co.nz'
       };
 
       const adminEmailsResult = await masterDb.query(

@@ -9,6 +9,7 @@ const generateEmailContent = (purpose, data) => {
                <p>Thank you for contacting us! We’ve received your message and our team will get back to you as soon as possible.</p>
                <p>Here's a summary of what you shared with us :</p>
                <p><strong>Message : </strong>${data.message}</p>
+               <p><a href="${data.website_link}" target="_blank">Visit our website for future inquiries</a></p>
                <p>We appreciate your interest in Just Cakes and look forward to assisting you!</p>
             <p><strong>Warm regards,<br>The Just Cakes Team</strong></p>`,
       };

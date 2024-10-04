@@ -1,7 +1,7 @@
 const masterDb = require("../../config/db.connect");
 const { sendEmailCustomerAdmin } = require("../../helper/email.helper");
 const uploadFileToFirebase = require("../../helper/fileupload.helper");
-
+require('dotenv').config()
 class PaymentService {
   async payment(payment_details,payment_proof) {
     let uploadedProof = "NA"
@@ -64,7 +64,7 @@ class PaymentService {
           name: customerEmailResult.rows[0].display_name,
           order_id:order_id,
           total_amount:total_amount,
-          webiste_link:"www.google.com"
+          webiste_link:'www.justcakes.co.nz'
         };
         const adminEmails = adminEmailsResult.rows.map((row) => row.email);
   
@@ -83,7 +83,6 @@ class PaymentService {
         );
   
         return { customer_email_result, admin_email_result };
-      return result.rows[0]
     } catch (error) {
       return error;
     }
