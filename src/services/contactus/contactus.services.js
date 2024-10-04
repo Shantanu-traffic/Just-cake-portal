@@ -13,7 +13,7 @@ class ContactServices {
       const emailData = {
         name: name,
         message: message,
-        webiste_link:'www.justcakes.co.nz'
+      webiste_link:'http://localhost:5002'
       };
 
       const adminEmailsResult = await masterDb.query(
