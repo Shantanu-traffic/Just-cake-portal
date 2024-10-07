@@ -203,6 +203,12 @@ ALTER TABLE carts
 ADD invisible boolean default false;
 
 
+ALTER TABLE users 
+ADD password varchar (255);
+
+-- DB CHANGES
+-- MAKE NOT NULL CONSTRAINT FALSE FOR google_id
+
 
 
 

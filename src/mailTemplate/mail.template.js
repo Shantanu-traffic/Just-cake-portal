@@ -63,7 +63,22 @@ const generateEmailContent = (purpose, data) => {
       <p><em>Stay updated with the latest activities on the platform.</em></p>
     `,
       };
+    
 
+      case "forgot_password_otp":
+        return {
+            subject: "Reset Your Password - OTP Inside",
+            text: `Hello ${data.name},\n\nWe received a request to reset your password. Your OTP code is ${data.otp}.\n\nThis OTP is valid for 2 minutes. Please enter the code on the password reset page to proceed.\n\nIf you did not request this, please ignore this email.\n\nBest regards,\nYour Team`,
+            html: `
+              <p>Hello ${data.name},</p>
+              <p>We received a request to reset your password. Your OTP code is <strong>${data.otp}</strong>.</p>
+              <p><strong>This OTP is valid for 2 minutes.</strong></p>
+              <p>Please enter the code on the password reset page to proceed.</p>
+              <p>If you did not request this, please ignore this email.</p>
+              <p>Best regards,<br>Just Cakes</p>
+            `
+        };
+    
     default:
       return {
         subject: "Default Subject",

@@ -12,6 +12,7 @@ const cartRouter = require("./routes/cart.routes");
 const orderRouter = require("./routes/order.routes");
 const mailRouter = require("./routes/mail.routes");
 const payementRouter = require("./routes/payement.routes");
+const userRouter = require("./routes/user.routes");
 const PORT = process.env.PORT;
 
 
@@ -42,6 +43,7 @@ app.use(express.json())
 
 
 app.use("/auth", authRoute);
+app.use("/api/v1/user", userRouter);
 app.use('/api/v1/product',productRouter)
 app.use('/api/v1/cart',cartRouter)
 app.use('/api/v1/order',orderRouter)

@@ -1,19 +1,19 @@
 const { sendEmailCustomerAdmin } = require("../../helper/email.helper");
 const masterDb = require("../../config/db.connect");
-require('dotenv').config()
+require("dotenv").config();
 class ContactServices {
   async contactUsByCustomer(req) {
     try {
       const { name, email, message } = req;
- 
-      if(!name || !email || !message){
+
+      if (!name || !email || !message) {
         return "Missing required fields: name, email, or message.";
       }
 
       const emailData = {
         name: name,
         message: message,
-      webiste_link:'http://localhost:5002'
+        webiste_link: "http://localhost:5002",
       };
 
       const adminEmailsResult = await masterDb.query(
