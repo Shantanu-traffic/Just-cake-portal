@@ -206,6 +206,21 @@ ADD invisible boolean default false;
 ALTER TABLE users 
 ADD password varchar (255);
 
+
+
+CREATE TABLE order_request (
+    order_request_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    phone VARCHAR(15) NOT NULL,
+    address TEXT NOT NULL,
+    cake_size VARCHAR(100) NOT NULL,
+    cake_type VARCHAR(100) NOT NULL,
+    order_date TIMESTAMP NOT NULL,
+    order_sample TEXT,
+    message TEXT
+);
+
 -- DB CHANGES
 -- MAKE NOT NULL CONSTRAINT FALSE FOR google_id
 

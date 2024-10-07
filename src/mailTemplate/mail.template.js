@@ -1,30 +1,43 @@
 // Function to generate email content based on the purpose
 const generateEmailContent = (purpose, data) => {
   switch (purpose) {
-    case "contactus_email_for_customer":
-      return {
-        subject: "Thank You for Reaching Out to Just Cakes!",
+    
+    case "request_order_email_for_customer":
+  return {
+    subject: "Thank You for Your Order Request at Just Cakes!",
+    html: `<p><strong>Hi ${data.name},</strong></p>
+           <p>Thank you for your order request! We have received the following details:</p>
+           <p><strong>Cake Size:</strong> ${data.cake_size}</p>
+           <p><strong>Cake Type:</strong> ${data.cake_type}</p>
+           <p><strong>Order Date:</strong> ${data.order_date}</p>
+            ${data.image ? `<p><strong>Cake Sample:</strong> <a href="${data.image}" target="_blank">View Image</a></p>` : ''}
+            ${data.message ? `<p><strong>Message:</strong> ${data.message}</p>` : ''}
+           <p><strong>Contact Information:</strong></p>
+           <p>Email: ${data.email}<br>Phone: ${data.phone}<br>Address: ${data.address}</p>
+           <p>Our team will review your order and get back to you shortly!</p>
+           <p><a href="${data.website_link}" target="_blank">Visit our website for future inquiries</a></p>
+           <p>We appreciate your interest in Just Cakes and look forward to serving you!</p>
+           <p><strong>Warm regards,<br>The Just Cakes Team</strong></p>`,
+  };
 
-        html: `<p><strong>Hi ${data.name},</strong></p>
-               <p>Thank you for contacting us! We’ve received your message and our team will get back to you as soon as possible.</p>
-               <p>Here's a summary of what you shared with us :</p>
-               <p><strong>Message : </strong>${data.message}</p>
-               <p><a href="${data.website_link}" target="_blank">Visit our website for future inquiries</a></p>
-               <p>We appreciate your interest in Just Cakes and look forward to assisting you!</p>
-            <p><strong>Warm regards,<br>The Just Cakes Team</strong></p>`,
-      };
-
-    case "contactus_email_for_admin":
-      return {
-        subject: "New Contact Us Form Submission",
-        html: `<p><strong>Hello Admin,</strong></p>
-                       <p>A new message has been submitted via the Contact Us form on the website.</p>
-                       <p>Here are the details:</p>
-                       <p><strong>Name : </strong> ${data.name}</p>
-                       <p><strong>Message : </strong>${data.message}</p>
-                       <p>Please follow up with this inquiry as soon as possible.</p>
-                    <p><strong>Best regards,<br>Just Cakes System</strong></p>`,
-      };
+case "request_order_email_for_admin":
+  return {
+    subject: "New Order Request Submission",
+    html: `<p><strong>Hello Admin,</strong></p>
+           <p>A new order request has been submitted via the Contact Us form on the website.</p>
+           <p>Here are the details:</p>
+           <p><strong>Name:</strong> ${data.name}</p>
+           <p><strong>Email:</strong> ${data.email}</p>
+           <p><strong>Phone:</strong> ${data.phone}</p>
+           <p><strong>Address:</strong> ${data.address}</p>
+           <p><strong>Cake Size:</strong> ${data.cake_size}</p>
+           <p><strong>Cake Type:</strong> ${data.cake_type}</p>
+            ${data.image ? `<p><strong>Cake Sample:</strong> <a href="${data.image}" target="_blank">View Image</a></p>` : ''}
+           <p><strong>Order Date:</strong> ${data.order_date}</p>
+           ${data.message ? `<p><strong>Message:</strong> ${data.message}</p>` : ''}
+           <p>Please follow up with this request as soon as possible.</p>
+           <p><strong>Best regards,<br>Just Cakes System</strong></p>`,
+  };
 
     case "payment_email_for_customer":
       return {

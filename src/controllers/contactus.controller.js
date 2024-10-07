@@ -3,9 +3,10 @@ const { ContactUsServices } = require("../services")
 
 
 const contactUs = async (req,res,next)=>{
-    const {title,email,message} = req.body
+    
+    console.log("user data",req.body)
         try {
-            const result = await ContactUsServices.ContactUs.contactUsByCustomer(req.body)
+            const result = await ContactUsServices.ContactUs.contactUsByCustomer(req)
             console.log(result,"result data")
             return res.status(200).json({
                 success:true,
