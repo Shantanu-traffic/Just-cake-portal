@@ -64,28 +64,35 @@ class UserService {
     try {
       result = await masterDb.query(
         `
-          SELECT display_name,email,password,is_admin FROM users WHERE email = $1
+          SELECT id,display_name, email, password, is_admin FROM users WHERE email = $1
           AND password IS NOT NULL
         `,
         [email]
       );
- 
-      if (result.rows.length == 0) {
-        return `${email} This user not register on data base`;
-      } else {
-        let password_in_db = result.rows[0].password;
-        const compare_password = await comparePassword(
-          password,
-          password_in_db
-        );
-        if (compare_password) {
-          return result.rows[0];
-        } else {
-          return "Wrong Credential";
-        }
+
+      if (result.rows.length === 0) {
+        return {
+          success: false,
+          message: `${email} is not registered in the database`,
+        };
       }
+      let password_in_db = result.rows[0].password;
+      const compare_password = await comparePassword(password, password_in_db);
+
+      if (!compare_password) {
+        return {
+          success: false,
+          message: "Wrong credentials",
+        };
+      }
+
+      return {
+        success: true,
+        message: "Login successful",
+        user: result.rows[0],
+      };
     } catch (error) {
-      throw error;
+      throw error; // Or you can send a response with the error message if required
     }
   }
 
@@ -128,13 +135,13 @@ class UserService {
   }
 
   async resetPassword(body) {
-    const {otp,token,newPassword} = body
+    const { otp, token, newPassword } = body;
     try {
       const JWT_SECRET = process.env.JWT_SECRET_KEY;
       // Verify the OTP token
-      const decoded = jwt.verify(token,JWT_SECRET);
-      console.log("decond data",decoded)
-      const {email} = decoded
+      const decoded = jwt.verify(token, JWT_SECRET);
+      console.log("decond data", decoded);
+      const { email } = decoded;
       // Check if the input OTP matches the one in the token
       if (decoded.otp !== parseInt(otp)) {
         return { status: "error", message: "Invalid OTP" };
@@ -142,7 +149,7 @@ class UserService {
 
       // If OTP is valid, hash the new password
 
-      const hashedPassword = await hashPassowrd(newPassword)
+      const hashedPassword = await hashPassowrd(newPassword);
       await masterDb.query(
         `UPDATE users SET password = $1 WHERE email = $2`,
         [hashedPassword, email] // Use the email decoded from the token
@@ -153,7 +160,7 @@ class UserService {
       if (error.name === "TokenExpiredError") {
         return { status: "error", message: "OTP has expired" };
       }
-      return error
+      return error;
     }
   }
 }

@@ -45,13 +45,22 @@ const loginUserManually = async (req, res, next) => {
   }
   try {
     const result = await UserServices.User.loginUserManually(req.body);
-    if (result.password) {
-      delete result.password;
+    if (!result.success) {
+      // Handle incorrect login attempts
+      return res.status(400).json({
+        success: false,
+        message: result.message, // 'Wrong credentials' or 'User not registered'
+      });
+    }
+
+    // Remove password field before sending response
+    if (result.user.password) {
+      delete result.user.password;
     }
     return res.status(200).json({
       success: true,
       message: "User login successfully",
-      result,
+      result: result.user,
     });
   } catch (error) {
     return next(createError(error.message, 500, "login user controller"));
