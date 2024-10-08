@@ -25,7 +25,10 @@ const registerUserManually = async (req, res, next) => {
   }
   try {
     const result = await UserServices.User.registerUserManually(req.body);
-    console.log("result found", result);
+    
+    if(!result.success){
+      return next(createError(result.message,400,"register controller"))
+    }
     return res.status(200).json({
       success: true,
       message: "User register successfully",
@@ -41,19 +44,19 @@ const registerUserManually = async (req, res, next) => {
 const loginUserManually = async (req, res, next) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    return next(createError("Fill All the details", 400, "login controller"));
+    return next(createError("Fill All the details", 200, "login controller"));
   }
   try {
     const result = await UserServices.User.loginUserManually(req.body);
     if (!result.success) {
-      // Handle incorrect login attempts
+     
       return res.status(400).json({
         success: false,
-        message: result.message, // 'Wrong credentials' or 'User not registered'
+        message: result.message, 
       });
     }
 
-    // Remove password field before sending response
+    
     if (result.user.password) {
       delete result.user.password;
     }

@@ -41,8 +41,11 @@ class UserService {
         [email]
       );
       if (userExist.rows.length > 0) {
-        return `${email} this user already registered`;
-      } else {
+        return {
+          success:false,
+          message:`${email} this user already registered`
+        }
+      } 
         const hash_pass = await hashPassowrd(password);
         newUserInsert = await masterDb.query(
           `
@@ -51,8 +54,12 @@ class UserService {
                 `,
           [name, email, hash_pass]
         );
-      }
-      return newUserInsert.rows[0];
+        return {
+          success: true,
+          message: "Login successful",
+          result: result.rows[0],
+        };
+      // return newUserInsert.rows[0];
     } catch (error) {
       throw error;
     }
@@ -80,7 +87,7 @@ class UserService {
       const compare_password = await comparePassword(password, password_in_db);
 
       if (!compare_password) {
-        return {
+        return {  
           success: false,
           message: "Wrong credentials",
         };
