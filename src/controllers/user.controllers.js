@@ -32,7 +32,7 @@ const registerUserManually = async (req, res, next) => {
     return res.status(200).json({
       success: true,
       message: "User register successfully",
-      result,
+      result:result,
     });
   } catch (error) {
     return next(
