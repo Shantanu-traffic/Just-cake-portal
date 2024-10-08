@@ -1,5 +1,6 @@
 // Function to generate email content based on the purpose
 const generateEmailContent = (purpose, data) => {
+  console.log("data found",data)
   switch (purpose) {
     
     case "request_order_email_for_customer":
@@ -30,6 +31,7 @@ case "request_order_email_for_admin":
            <p><strong>Email:</strong> ${data.email}</p>
            <p><strong>Phone:</strong> ${data.phone}</p>
            <p><strong>Address:</strong> ${data.address}</p>
+           <p><a href="${data.website_link}" target="_blank">Visit our website for future inquiries</a></p>
            <p><strong>Cake Size:</strong> ${data.cake_size}</p>
            <p><strong>Cake Type:</strong> ${data.cake_type}</p>
             ${data.image ? `<p><strong>Cake Sample:</strong> <a href="${data.image}" target="_blank">View Image</a></p>` : ''}

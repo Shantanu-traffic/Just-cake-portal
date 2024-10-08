@@ -65,9 +65,11 @@ class UserService {
       result = await masterDb.query(
         `
           SELECT display_name,email,password,is_admin FROM users WHERE email = $1
+          AND password IS NOT NULL
         `,
         [email]
       );
+ 
       if (result.rows.length == 0) {
         return `${email} This user not register on data base`;
       } else {

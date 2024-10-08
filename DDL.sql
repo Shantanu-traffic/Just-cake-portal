@@ -224,7 +224,9 @@ CREATE TABLE order_request (
 -- DB CHANGES
 -- MAKE NOT NULL CONSTRAINT FALSE FOR google_id
 
-
+-- 8-10-2024
+ALTER TABLE order_request
+ALTER COLUMN order_date TYPE varchar (255);
 
 
  
