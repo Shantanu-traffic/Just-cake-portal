@@ -57,7 +57,7 @@ class UserService {
         return {
           success: true,
           message: "Login successful",
-          result: result.rows[0],
+          result: newUserInsert.rows[0],
         };
       // return newUserInsert.rows[0];
     } catch (error) {
