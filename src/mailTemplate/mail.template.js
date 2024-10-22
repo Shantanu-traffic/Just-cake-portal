@@ -5,7 +5,7 @@ const generateEmailContent = (purpose, data) => {
     
     case "request_order_email_for_customer":
   return {
-    subject: "Thank You for Your Order Request at Just Cakes!",
+    subject: "Thank You for Your Order Request at Cakes Crafts!",
     html: `<p><strong>Hi ${data.name},</strong></p>
            <p>Thank you for your order request! We have received the following details:</p>
            <p><strong>Cake Size:</strong> ${data.cake_size}</p>
@@ -17,8 +17,8 @@ const generateEmailContent = (purpose, data) => {
            <p>Email: ${data.email}<br>Phone: ${data.phone}<br>Address: ${data.address}</p>
            <p>Our team will review your order and get back to you shortly!</p>
            <p><a href="${data.website_link}" target="_blank">Visit our website for future inquiries</a></p>
-           <p>We appreciate your interest in Just Cakes and look forward to serving you!</p>
-           <p><strong>Warm regards,<br>The Just Cakes Team</strong></p>`,
+           <p>We appreciate your interest in Cakes Crafts and look forward to serving you!</p>
+           <p><strong>Warm regards,<br>The Cakes Crafts Team</strong></p>`,
   };
 
 case "request_order_email_for_admin":
@@ -38,7 +38,7 @@ case "request_order_email_for_admin":
            <p><strong>Order Date:</strong> ${data.order_date}</p>
            ${data.message ? `<p><strong>Message:</strong> ${data.message}</p>` : ''}
            <p>Please follow up with this request as soon as possible.</p>
-           <p><strong>Best regards,<br>Just Cakes System</strong></p>`,
+           <p><strong>Best regards,<br>Cakes Crafts System</strong></p>`,
   };
 
     case "payment_email_for_customer":
@@ -54,7 +54,7 @@ case "request_order_email_for_admin":
       
       <p><a href="${data.website_link}" target="_blank">Visit our website for future inquiries</a></p>
       
-      <p><strong>Best regards,<br>Just Cakes Team</strong></p>
+      <p><strong>Best regards,<br>Cakes Crafts Team</strong></p>
       <p><em>Follow us on our social channels for the latest updates!</em></p>
     `,
       };
@@ -74,7 +74,7 @@ case "request_order_email_for_admin":
       
       <p><a href="${data.website_link}" target="_blank">Go to Admin Dashboard</a></p>
       
-      <p><strong>Best regards,<br>Just Cakes System</strong></p>
+      <p><strong>Best regards,<br>Cakes Crafts System</strong></p>
       <p><em>Stay updated with the latest activities on the platform.</em></p>
     `,
       };
@@ -90,7 +90,7 @@ case "request_order_email_for_admin":
               <p><strong>This OTP is valid for 2 minutes.</strong></p>
               <p>Please enter the code on the password reset page to proceed.</p>
               <p>If you did not request this, please ignore this email.</p>
-              <p>Best regards,<br>Just Cakes</p>
+              <p>Best regards,<br>Cakes Crafts</p>
             `
         };
     
