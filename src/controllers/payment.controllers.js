@@ -15,7 +15,8 @@ const payment = async (req,res,next)=>{
         console.log(req.body,req.file);
         await masterDb.query("BEGIN");
         const result = await PaymentService.Payment.payment(req.body,req.file)
-        const mailResponse = await PaymentService.Payment.paymentMail(result.user_id,result.order_id,result.total_amount)
+        console.log("result data",result)
+        const mailResponse = await PaymentService.Payment.paymentMail(result.user_id,result.order_id,result.total_amount,payment_mode,result.payment_receipt_attachement)
         await masterDb.query("COMMIT");
         return res.status(200).json({
             success:true,

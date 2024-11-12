@@ -20,7 +20,7 @@ class PaymentService {
       const result = await masterDb.query(
         `
                     INSERT INTO payments (order_id,user_id,payment_mode,payment_receipt_attachement,total_amount)
-                    VALUES ($1,$2,$3,$4,$5) returning payment_id,order_id,total_amount,user_id
+                    VALUES ($1,$2,$3,$4,$5) returning payment_id,order_id,payment_receipt_attachement,total_amount,user_id
                 `,
         [
           order_id,
@@ -46,7 +46,7 @@ class PaymentService {
     }
   }
 
-  async paymentMail(user_id,order_id,total_amount) {
+  async paymentMail(user_id,order_id,total_amount,payment_mode,payment_receipt_attachement) {
     try {
 
       const customerEmailResult = await masterDb.query(`
@@ -64,7 +64,9 @@ class PaymentService {
           name: customerEmailResult.rows[0].display_name,
           order_id:order_id,
           total_amount:total_amount,
-          webiste_link:'http://localhost:5002'
+          payment_mode,
+          payment_attachement:payment_receipt_attachement,
+          webiste_link:'http://www.cakecrafts.co.nz/'
         };
         const adminEmails = adminEmailsResult.rows.map((row) => row.email);
   
