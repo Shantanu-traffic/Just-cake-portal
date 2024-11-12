@@ -5,7 +5,7 @@ const generateEmailContent = require("../mailTemplate/mail.template")
 const sendEmailCustomerAdmin = async (recipients, purpose, data) => {
   const emailContent = generateEmailContent(purpose, data);
   const sentEmails = [];
-  const from = `JUST CAKES <${process.env.NODEMAILER_USER_EMAIL}>`;
+  const from = `CAKE CRAFTS <${process.env.NODEMAILER_USER_EMAIL}>`;
   for (const email of recipients) {
     const mailOptions = {
       from: from,
