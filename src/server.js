@@ -21,15 +21,13 @@ const app = express();
 // Trust the first proxy (required for secure cookies behind Nginx in production)
 app.set("trust proxy", 1);
 
-const isProduction = process.env.NODE_ENV === "production";
-
 app.use(
   cookieSession({
     name: "session",
     keys: [process.env.SESSION_SECRET || "Techverse"],
     maxAge: 24 * 60 * 60 * 1000,
-    secure: isProduction,       // HTTPS only in prod
-    sameSite: isProduction ? "none" : "lax",  // cross-origin cookies in prod
+    secure: false,        // site is HTTP, not HTTPS — secure:true would drop cookies silently
+    sameSite: "lax",
     httpOnly: true,
   })
 );
@@ -76,12 +74,12 @@ app.use('/api/v1/payment',payementRouter)
 
 app.get("/login/success", (req, res) => {
   if (req.user) {
-    const isProduction = process.env.NODE_ENV === "production";
     // Set a readable cookie with user info for the frontend
+    // secure: false because site runs on HTTP (not HTTPS); secure:true silently drops cookies on HTTP
     res.cookie("user", JSON.stringify(req.user), {
-      httpOnly: false,          // frontend JS needs to read this
-      secure: isProduction,     // HTTPS only in prod
-      sameSite: isProduction ? "none" : "lax",
+      httpOnly: false,   // frontend JS needs to read this
+      secure: false,
+      sameSite: "lax",
       maxAge: 24 * 60 * 60 * 1000,
     });
     res.redirect(process.env.CLIENT_URL);
