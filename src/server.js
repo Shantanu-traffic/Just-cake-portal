@@ -18,22 +18,41 @@ const PORT = process.env.PORT;
 
 const app = express();
 
+// Trust the first proxy (required for secure cookies behind Nginx in production)
+app.set("trust proxy", 1);
+
+const isProduction = process.env.NODE_ENV === "production";
 
 app.use(
   cookieSession({
     name: "session",
-    keys: ["Techverse"],
-    maxAge: 24 * 60 * 60 * 100,
+    keys: [process.env.SESSION_SECRET || "Techverse"],
+    maxAge: 24 * 60 * 60 * 1000,
+    secure: isProduction,       // HTTPS only in prod
+    sameSite: isProduction ? "none" : "lax",  // cross-origin cookies in prod
+    httpOnly: true,
   })
 );
 
 app.use(passport.initialize());
 app.use(passport.session());
 
+const allowedOrigins = [
+  "http://localhost:5002",
+  "http://cakecrafts.co.nz",
+  "https://cakecrafts.co.nz",
+];
 
 app.use(
   cors({
-    origin: "http://localhost:5002",
+    origin: function (origin, callback) {
+      // Allow requests with no origin (mobile apps, curl) or from allowedOrigins
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     methods: "GET,POST,PUT,DELETE,PATCH",
     credentials: true,
   })
@@ -56,13 +75,19 @@ app.use('/api/v1/payment',payementRouter)
 
 
 app.get("/login/success", (req, res) => {
-  
-if (req.user) {
-  res.cookie('user', JSON.stringify(req.user));
-      res.redirect(process.env.CLIENT_URL)
-} else {
-  res.status(403).json({ error: true, message: "Not Authorized" });
-}
+  if (req.user) {
+    const isProduction = process.env.NODE_ENV === "production";
+    // Set a readable cookie with user info for the frontend
+    res.cookie("user", JSON.stringify(req.user), {
+      httpOnly: false,          // frontend JS needs to read this
+      secure: isProduction,     // HTTPS only in prod
+      sameSite: isProduction ? "none" : "lax",
+      maxAge: 24 * 60 * 60 * 1000,
+    });
+    res.redirect(process.env.CLIENT_URL);
+  } else {
+    res.status(403).json({ error: true, message: "Not Authorized" });
+  }
 });
 
 app.get("/login/failed", (req, res) => {
