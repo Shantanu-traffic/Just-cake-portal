@@ -1,25 +1,40 @@
 const router = require("express").Router();
 const passport = require("passport");
 
-router.get("/google", passport.authenticate("google", ["profile", "email"]));
+/** Public site base URL (no trailing slash), e.g. https://cakecrafts.co.nz */
+const clientBase = () =>
+  (process.env.CLIENT_URL || "http://localhost:5002").replace(/\/$/, "");
+
+/** Where to send the user after Google login (must be a frontend route). */
+const postOAuthPath = () => {
+  const p = process.env.OAUTH_POST_LOGIN_PATH || "/";
+  return p.startsWith("/") ? p : `/${p}`;
+};
+
+router.get(
+  "/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
 
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    successRedirect: "/login/success", // Sets user cookie then redirects to CLIENT_URL
-    failureRedirect: "/login/failed",
+    failureRedirect: `${clientBase()}/forgot-password`,
+    session: true,
   }),
   (req, res) => {
-    // Save user information to the session (no need to regenerate session)
-    req.session.user = req.user; // Store user data in the session
-    res.json({ success: true });
+    if (!req.user) {
+      return res.redirect(`${clientBase()}/login`);
+    }
+    const isProd = process.env.NODE_ENV === "production";
+    res.cookie("user", JSON.stringify(req.user), {
+      httpOnly: false,
+      secure: isProd,
+      sameSite: "lax",
+      maxAge: 24 * 60 * 60 * 1000,
+    });
+    res.redirect(`${clientBase()}${postOAuthPath()}`);
   }
 );
-
-// router.get("/logout", (req, res) => {
-//   req.logout();         // Logout the user
-//   req.session = null;   // Clear the session
-//   res.redirect(process.env.CLIENT_URL);  // Redirect to client URL after logout
-// });
 
 module.exports = router;
